@@ -15,6 +15,7 @@ import java.util.List;
 public class User {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String username;
@@ -33,14 +34,6 @@ public class User {
     @Embeddable
     public static class PlayerDetails {
         private Long score;
-
-        @ManyToMany(targetEntity = Question.class)
-        @JoinTable(
-                name = "user_attempted_questions",
-                joinColumns = @JoinColumn(name = "user_id"),
-                inverseJoinColumns = @JoinColumn(name = "question_id")
-        )
-        private List<Question> attemptedQuestions;
 
         @ManyToMany(targetEntity = User.class)
         @JoinTable(
