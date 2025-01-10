@@ -1,5 +1,6 @@
 package com.games.QuizConnect.model.entity;
 
+import com.games.QuizConnect.model.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,11 +13,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @Entity
-public class Category {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+public class Category extends BaseEntity {
 
     private String name;
 

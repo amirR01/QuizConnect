@@ -1,5 +1,6 @@
 package com.games.QuizConnect.model.entity;
 
+import com.games.QuizConnect.model.BaseEntity;
 import com.games.QuizConnect.model.enums.QuestionDifficulty;
 import com.games.QuizConnect.utils.QuestionOptionsConverter;
 import jakarta.persistence.*;
@@ -13,11 +14,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @Entity
-public class Question {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+public class Question extends BaseEntity {
 
     @ManyToOne(targetEntity = User.class)
     private User designer;
@@ -58,5 +55,8 @@ public class Question {
             };
         }
 
+    }
+    public void addCategory(Category category) {
+        this.category.add(category);
     }
 }

@@ -1,22 +1,21 @@
 package com.games.QuizConnect.model.entity;
 
+import com.games.QuizConnect.model.BaseEntity;
 import com.games.QuizConnect.model.enums.UserType;
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
-public class User {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+public class User extends BaseEntity {
 
     private String username;
 
@@ -31,9 +30,15 @@ public class User {
     @Embedded
     private DesignerDetails designerDetails;
 
+    public void addScore(Long score) {
+        playerDetails.setScore(playerDetails.getScore() + score);
+    }
+
     @Embeddable
+    @Data
     public static class PlayerDetails {
-        private Long score;
+        @Column(nullable = false)
+        private Long score = 0L;
 
         @ManyToMany(targetEntity = User.class)
         @JoinTable(
@@ -41,7 +46,7 @@ public class User {
                 joinColumns = @JoinColumn(name = "user_id"),
                 inverseJoinColumns = @JoinColumn(name = "player_id")
         )
-        private List<User> followedPlayers;
+        private List<User> followedPlayers = new ArrayList<>();
 
         @ManyToMany(targetEntity = User.class)
         @JoinTable(
@@ -49,10 +54,11 @@ public class User {
                 joinColumns = @JoinColumn(name = "user_id"),
                 inverseJoinColumns = @JoinColumn(name = "designer_id")
         )
-        private List<User> followedDesigners;
+        private List<User> followedDesigners = new ArrayList<>();
     }
 
     @Embeddable
+    @Data
     public static class DesignerDetails {
         @OneToMany(targetEntity = Question.class, mappedBy = "designer")
         private List<Question> createdQuestions;
