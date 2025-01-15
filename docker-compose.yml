@@ -1,0 +1,9 @@
+version: "3.8"
+services:
+  db:
+    image: "postgres:15.2"
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: defaultPassword
+    ports:
+      - "5432:5432"

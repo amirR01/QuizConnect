@@ -1,0 +1,24 @@
+###
+POST http://localhost:8080/user/add
+Content-Type: application/json
+
+{
+    "username": "Amirhossein",
+    "password": "defaultPassword",
+    "userType": "DESIGNER"
+}
+
+###
+POST http://localhost:8080/question/add
+userId: 1
+Content-Type: application/json
+
+{
+  "question": "What is the capital of Canada?",
+  "option1": "Toronto",
+  "option2": "Ottawa",
+  "option3": "Vancouver",
+  "option4": "Montreal",
+  "correctOption": 2,
+  "difficulty": "MEDIUM"
+}
