@@ -6,7 +6,10 @@ import com.games.QuizConnect.model.enums.QuestionDifficulty;
 import java.util.List;
 
 public interface QuestionService {
-    void addQuestion(String question, Question.QuestionOptions options, Integer categoryId, Integer designerId, QuestionDifficulty difficulty);
+    void addQuestion(String question,
+                     Question.QuestionOptions options,
+                     Integer correctOption,
+                     Integer categoryId, Integer designerId, QuestionDifficulty difficulty);
 
     void changeCategory(Integer questionId, Integer categoryId);
 
