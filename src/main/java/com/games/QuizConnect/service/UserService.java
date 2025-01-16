@@ -6,7 +6,7 @@ import com.games.QuizConnect.model.enums.UserType;
 import java.util.List;
 
 public interface UserService {
-    Integer login(String username, String password);
+    User login(String username, String password);
 
     Integer addUser(String username, String password, UserType userType);
 

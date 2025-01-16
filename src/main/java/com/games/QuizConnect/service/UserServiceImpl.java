@@ -19,7 +19,7 @@ public class UserServiceImpl implements UserService {
     }
 
     // TODO: use Spring Security to authenticate users and store current user in the session
-    public Integer login(String username, String password) {
+    public User login(String username, String password) {
         User user = userRepository.findByUsername(username);
         if (user == null) {
             throw new IllegalArgumentException("User not found");
@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
         if (!user.getPassword().equals(password)) {
             throw new IllegalArgumentException("Incorrect password");
         }
-        return user.getId();
+        return user;
     }
 
     public Integer addUser(String username, String password, UserType userType) {

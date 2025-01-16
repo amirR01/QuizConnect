@@ -1,7 +1,10 @@
 package com.games.QuizConnect.controller;
 
 import com.games.QuizConnect.model.dto.request.CreateUserRequestDTO;
+import com.games.QuizConnect.model.dto.request.LoginRequestDTO;
 import com.games.QuizConnect.model.dto.response.IdResponseDTO;
+import com.games.QuizConnect.model.dto.response.LoginResponseDTO;
+import com.games.QuizConnect.model.entity.User;
 import com.games.QuizConnect.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,15 +24,15 @@ public class UserController {
     }
 
     @PostMapping(value = "/login", consumes = "application/json")
-    public ResponseEntity<?> loginUser(@RequestBody CreateUserRequestDTO createUserDTO) {
+    public ResponseEntity<?> loginUser(@RequestBody LoginRequestDTO createUserDTO) {
         createUserDTO.validate();
         try {
-            Integer userId = userService.login(createUserDTO.getUsername(), createUserDTO.getPassword());
-            IdResponseDTO response = new IdResponseDTO();
-            response.setId(userId);
-            return ResponseEntity.ok(response);
+            User user = userService.login(createUserDTO.getUsername(), createUserDTO.getPassword());
+            return ResponseEntity.ok(LoginResponseDTO.fromUser(user));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            LoginResponseDTO response = new LoginResponseDTO();
+            response.setStatus(false);
+            return ResponseEntity.ok(response);
         }
     }
 

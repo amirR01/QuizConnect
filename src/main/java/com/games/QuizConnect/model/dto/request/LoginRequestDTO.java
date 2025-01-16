@@ -4,7 +4,7 @@ import com.games.QuizConnect.model.BaseDTO;
 import lombok.Data;
 
 @Data
-public class LoginRequest extends BaseDTO {
+public class LoginRequestDTO extends BaseDTO {
     private String username;
     private String password;
 
