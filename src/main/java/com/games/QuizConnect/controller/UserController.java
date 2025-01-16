@@ -1,7 +1,7 @@
 package com.games.QuizConnect.controller;
 
-import com.games.QuizConnect.model.dto.request.CreateUserRequestDTO;
-import com.games.QuizConnect.model.dto.request.LoginRequestDTO;
+import com.games.QuizConnect.model.dto.request.CreateUserRequestRequestDTO;
+import com.games.QuizConnect.model.dto.request.LoginRequestRequestDTO;
 import com.games.QuizConnect.model.dto.response.IdResponseDTO;
 import com.games.QuizConnect.model.dto.response.LoginResponseDTO;
 import com.games.QuizConnect.model.entity.User;
@@ -24,7 +24,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/login", consumes = "application/json")
-    public ResponseEntity<?> loginUser(@RequestBody LoginRequestDTO createUserDTO) {
+    public ResponseEntity<?> loginUser(@RequestBody LoginRequestRequestDTO createUserDTO) {
         createUserDTO.validate();
         try {
             User user = userService.login(createUserDTO.getUsername(), createUserDTO.getPassword());
@@ -37,7 +37,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/sign-up", consumes = "application/json")
-    public ResponseEntity<?> addUser(@RequestBody CreateUserRequestDTO createUserDTO) {
+    public ResponseEntity<?> addUser(@RequestBody CreateUserRequestRequestDTO createUserDTO) {
         createUserDTO.validate();
         try {
             Integer userId = userService.addUser(createUserDTO.getUsername(), createUserDTO.getPassword(), createUserDTO.getUserType());

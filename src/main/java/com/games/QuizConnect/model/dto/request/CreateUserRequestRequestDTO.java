@@ -1,11 +1,11 @@
 package com.games.QuizConnect.model.dto.request;
 
-import com.games.QuizConnect.model.BaseDTO;
+import com.games.QuizConnect.model.BaseRequestDTO;
 import com.games.QuizConnect.model.enums.UserType;
 import lombok.Data;
 
 @Data
-public class CreateUserRequestDTO extends BaseDTO {
+public class CreateUserRequestRequestDTO extends BaseRequestDTO {
 
     private String username;
 

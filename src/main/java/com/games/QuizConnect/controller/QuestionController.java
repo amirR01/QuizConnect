@@ -1,6 +1,6 @@
 package com.games.QuizConnect.controller;
 
-import com.games.QuizConnect.model.dto.request.CreateQuestionRequestDTO;
+import com.games.QuizConnect.model.dto.request.CreateQuestionRequestRequestDTO;
 import com.games.QuizConnect.model.dto.request.GetQuestionsRequestDTO;
 import com.games.QuizConnect.model.dto.response.IdResponseDTO;
 import com.games.QuizConnect.model.dto.response.ViewQuestionResponseDto;
@@ -29,7 +29,7 @@ public class QuestionController {
     @PostMapping(value = "/add", consumes = "application/json")
     public ResponseEntity<?> addQuestion(
             @RequestHeader(userIdHeader) Integer userId,
-            @RequestBody CreateQuestionRequestDTO createQuestionRequestDTO
+            @RequestBody CreateQuestionRequestRequestDTO createQuestionRequestDTO
     ) {
         createQuestionRequestDTO.validate();
         if (userId == null) {

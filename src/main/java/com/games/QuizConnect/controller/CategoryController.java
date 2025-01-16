@@ -1,6 +1,6 @@
 package com.games.QuizConnect.controller;
 
-import com.games.QuizConnect.model.dto.request.CreateCategoryRequestDTO;
+import com.games.QuizConnect.model.dto.request.CreateCategoryRequestRequestDTO;
 import com.games.QuizConnect.model.dto.response.IdResponseDTO;
 import com.games.QuizConnect.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ public class CategoryController {
 
     @PostMapping(value = "/add", consumes = "application/json")
     public ResponseEntity<?> addCategory(
-            @RequestBody CreateCategoryRequestDTO createCategoryRequestDTO
+            @RequestBody CreateCategoryRequestRequestDTO createCategoryRequestDTO
     ) {
         createCategoryRequestDTO.validate();
         try {

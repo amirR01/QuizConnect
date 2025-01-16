@@ -1,12 +1,12 @@
 package com.games.QuizConnect.model.dto.request;
 
-import com.games.QuizConnect.model.BaseDTO;
+import com.games.QuizConnect.model.BaseRequestDTO;
 import com.games.QuizConnect.model.entity.Question;
 import com.games.QuizConnect.model.enums.QuestionDifficulty;
 import lombok.Data;
 
 @Data
-public class CreateQuestionRequestDTO extends BaseDTO {
+public class CreateQuestionRequestRequestDTO extends BaseRequestDTO {
 
     private String question;
 
