@@ -23,10 +23,11 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void addCategory(String name, String description) {
+    public Integer addCategory(String name, String description) {
         Category category = new Category();
         category.setName(name);
         category.setDescription(description);
-        categoryRepository.saveAndFlush(category);
+        category = categoryRepository.saveAndFlush(category);
+        return category.getId();
     }
 }

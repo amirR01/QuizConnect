@@ -24,6 +24,8 @@ public class UserServiceImpl implements UserService {
         user.setUsername(username);
         user.setPassword(password);
         user.setUserType(userType);
+        user.setPlayerDetails(new User.PlayerDetails());
+        user.setDesignerDetails(new User.DesignerDetails());
 
         userRepository.saveAndFlush(user);
     }

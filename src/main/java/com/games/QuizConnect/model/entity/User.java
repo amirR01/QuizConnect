@@ -14,21 +14,22 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@Entity
+@Entity(name = "Users")
 public class User extends BaseEntity {
 
     private String username;
 
+    // TODO: password should be encrypted
     private String password;
 
     @Enumerated(EnumType.STRING)
     private UserType userType;
 
     @Embedded
-    private PlayerDetails playerDetails;
+    private PlayerDetails playerDetails = null;
 
     @Embedded
-    private DesignerDetails designerDetails;
+    private DesignerDetails designerDetails = null;
 
     public void addScore(Long score) {
         playerDetails.setScore(playerDetails.getScore() + score);
@@ -61,8 +62,10 @@ public class User extends BaseEntity {
     @Data
     public static class DesignerDetails {
         @OneToMany(targetEntity = Question.class, mappedBy = "designer")
-        private List<Question> createdQuestions;
+        private List<Question> createdQuestions = new ArrayList<>();
     }
+
+    public static final String userIdHeader = "userId";
 }
 
 

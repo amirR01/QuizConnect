@@ -7,8 +7,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.List;
+import org.hibernate.annotations.ColumnTransformer;
 
 @Getter
 @Setter
@@ -16,34 +15,27 @@ import java.util.List;
 @Entity
 public class Question extends BaseEntity {
 
-    @ManyToOne(targetEntity = User.class)
+    @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
     private User designer;
 
     private String question;
 
     @Convert(converter = QuestionOptionsConverter.class)
+    @ColumnTransformer(write = "?::jsonb")
     @Column(columnDefinition = "jsonb")
     private QuestionOptions options;
 
-    private Integer answer;
+    private Integer correctOption;
 
-    @ManyToMany(targetEntity = Category.class)
-    @JoinTable(
-            name = "question_category",
-            joinColumns = @JoinColumn(name = "question_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id")
-    )
-    private List<Category> category;
+    @ManyToOne(targetEntity = Category.class)
+    private Category category;
 
     private QuestionDifficulty difficulty;
 
     private String explanation;
 
-    public static class QuestionOptions {
-        private String option1;
-        private String option2;
-        private String option3;
-        private String option4;
+    public record QuestionOptions(String option1, String option2, String option3,
+                                  String option4) {
 
         public String getByIndex(int index) {
             return switch (index) {
@@ -55,8 +47,5 @@ public class Question extends BaseEntity {
             };
         }
 
-    }
-    public void addCategory(Category category) {
-        this.category.add(category);
     }
 }

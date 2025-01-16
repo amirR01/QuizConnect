@@ -1,14 +1,14 @@
 package com.games.QuizConnect.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @MappedSuperclass
-@Data
+@Getter
+@Setter
 public abstract class BaseEntity {
 
     @Id
@@ -28,8 +28,24 @@ public abstract class BaseEntity {
         this.createdDate = now;
         this.modifiedDate = now;
     }
+
     @PreUpdate
     protected void onUpdate() {
         this.modifiedDate = LocalDateTime.now();
     }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (getClass() != obj.getClass()) return false;
+
+        BaseEntity other = (BaseEntity) obj;
+
+        return id.equals(other.id);
+    }
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
 }
+
+

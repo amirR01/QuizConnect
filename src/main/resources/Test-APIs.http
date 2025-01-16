@@ -3,9 +3,19 @@ POST http://localhost:8080/user/add
 Content-Type: application/json
 
 {
-    "username": "Amirhossein",
-    "password": "defaultPassword",
-    "userType": "DESIGNER"
+  "username": "Amirhossein",
+  "password": "defaultPassword",
+  "userType": "DESIGNER"
+}
+
+
+###
+POST http://localhost:8080/category/add
+Content-Type: application/json
+
+{
+  "name": "Geography",
+  "description": "Geography questions"
 }
 
 ###
@@ -20,5 +30,14 @@ Content-Type: application/json
   "option3": "Vancouver",
   "option4": "Montreal",
   "correctOption": 2,
-  "difficulty": "MEDIUM"
+  "difficulty": "MEDIUM",
+  "categoryId": 1
+}
+
+###
+POST http://localhost:8080/question/my-questions
+userId: 1
+Content-Type: application/json
+
+{
 }

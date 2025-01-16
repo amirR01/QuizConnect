@@ -10,9 +10,9 @@ import com.games.QuizConnect.repository.CategoryRepository;
 import com.games.QuizConnect.repository.QuestionRepository;
 import com.games.QuizConnect.repository.UserQuestionAttemptRepository;
 import com.games.QuizConnect.repository.UserRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -39,28 +39,38 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Transactional
-    public void addQuestion(String question,
-                            Question.QuestionOptions options,
-                            Integer correctOption,
-                            Integer categoryId, Integer designerId, QuestionDifficulty difficulty) {
+    public Integer addQuestion(String question,
+                               Question.QuestionOptions options,
+                               Integer correctOption,
+                               Integer categoryId, Integer designerId, QuestionDifficulty difficulty) {
         User designer = userRepository.findById(designerId).orElseThrow(() -> new IllegalArgumentException("User not found"));
-        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new IllegalArgumentException("Category not found"));
         if (designer.getUserType() != UserType.DESIGNER) {
             throw new IllegalArgumentException("User is not a designer");
+        }
+        Category category = null;
+        if (categoryId != null) {
+            category = categoryRepository.findById(categoryId).orElseThrow(() -> new IllegalArgumentException("Category not found"));
         }
 
         Question newQuestion = new Question();
         newQuestion.setQuestion(question);
         newQuestion.setOptions(options);
         newQuestion.setDesigner(designer);
-        newQuestion.addCategory(category);
+        if (category != null) {
+            newQuestion.setCategory(category);
+        }
         newQuestion.setDifficulty(difficulty);
+        newQuestion.setCorrectOption(correctOption);
 
-        questionRepository.saveAndFlush(newQuestion);
+        newQuestion = questionRepository.saveAndFlush(newQuestion);
+        return newQuestion.getId();
     }
 
     public void changeCategory(Integer questionId, Integer categoryId) {
-
+        Question question = questionRepository.findById(questionId).orElseThrow(() -> new IllegalArgumentException("Question not found"));
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new IllegalArgumentException("Category not found"));
+        question.setCategory(category);
+        questionRepository.saveAndFlush(question);
     }
 
     @Transactional
@@ -81,47 +91,62 @@ public class QuestionServiceImpl implements QuestionService {
         userRepository.saveAndFlush(player);
     }
 
-    public List<Question> getAllQuestionsByDesignerId(Integer designerId, Boolean attemptable) {
-        User designer = userRepository.findById(designerId).orElseThrow(() -> new IllegalArgumentException("User not found"));
-        if (designer.getUserType() != UserType.DESIGNER) {
-            throw new IllegalArgumentException("User is not a designer");
-        }
-        if (attemptable) {
-            return questionRepository.findNotAttemptedQuestions(designerId, null);
-        } else {
-            return questionRepository.findAllByDesignerId(designerId);
-        }
-    }
-
-    public List<Question> getAllQuestionsByCategoryId(Integer categoryId, Boolean attemptable) {
-        if (attemptable) {
-            return questionRepository.findNotAttemptedQuestions(null, categoryId);
-        } else {
-            return questionRepository.findAllByCategoryId(categoryId);
-        }
-    }
-
-    public Question getRandomQuestionByCategoryId(Integer categoryId, Boolean attemptable) {
-        List<Question> questionList = getAllQuestionsByCategoryId(categoryId, attemptable);
-        if (questionList.size() == 0) {
-            return null;
-        }
-        return getRandomElement(questionList);
-    }
-
-    public Question getQuestionById(Integer questionId) {
-        return questionRepository.findById(questionId).orElseThrow(()
-                -> new IllegalArgumentException("Question not found"));
-    }
-
     @Override
-    public Question getRandomAttemptableQuestion() {
-        List<Question> questionList = questionRepository.findNotAttemptedQuestions(null, null);
+    public Question getQuestionById(Integer questionId) {
+        return null;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Question> getAllQuestions(
+            Integer designerId,
+            Integer categoryId,
+            QuestionDifficulty difficulty,
+            Boolean attemptable,
+            Integer playerId) {
+
+        // TODO: This method can be removed since inputs not being valid only affects the return value
+        checkInputValuesForGetQuestionsMethod(designerId, categoryId, playerId);
+
+        if (attemptable) {
+            if (playerId == null) {
+                throw new IllegalArgumentException("Player id cannot be empty");
+            }
+            return questionRepository.findNotAttemptedQuestions(playerId, designerId, categoryId, difficulty);
+        } else {
+            return questionRepository.findAllQuestions(designerId, categoryId, difficulty);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public Question getRandomQuestion(
+            Integer designerId,
+            Integer categoryId,
+            QuestionDifficulty difficulty,
+            Boolean attemptable,
+            Integer playerId) {
+        List<Question> questionList = getAllQuestions(designerId, categoryId, difficulty, attemptable, playerId);
         if (questionList.size() == 0) {
             return null;
         }
         return getRandomElement(questionList);
     }
 
+    private void checkInputValuesForGetQuestionsMethod(Integer designerId, Integer categoryId, Integer playerId) {
+        if (designerId != null) {
+            User designer = userRepository.findById(designerId).orElseThrow(() -> new IllegalArgumentException("User not found"));
+            if (designer.getUserType() != UserType.DESIGNER) {
+                throw new IllegalArgumentException("User is not a designer");
+            }
+        }
+        if (categoryId != null) {
+            categoryRepository.findById(categoryId).orElseThrow(() -> new IllegalArgumentException("Category not found"));
+        }
+        if (playerId != null) {
+            User player = userRepository.findById(playerId).orElseThrow(() -> new IllegalArgumentException("User not found"));
+            if (player.getUserType() != UserType.PLAYER) {
+                throw new IllegalArgumentException("User is not a player");
+            }
+        }
+    }
 }
 
