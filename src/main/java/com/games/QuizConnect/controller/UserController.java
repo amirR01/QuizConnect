@@ -1,6 +1,7 @@
 package com.games.QuizConnect.controller;
 
 import com.games.QuizConnect.model.dto.request.CreateUserRequestDTO;
+import com.games.QuizConnect.model.dto.response.IdResponseDTO;
 import com.games.QuizConnect.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,8 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-    // TODO: use Spring Security to authenticate users and store current user in the session
-
     final private UserService userService;
 
     @Autowired
@@ -21,15 +20,30 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping(value = "/add", consumes = "application/json")
-    public ResponseEntity<?> addUser(@RequestBody CreateUserRequestDTO createUserDTO) {
+    @PostMapping(value = "/login", consumes = "application/json")
+    public ResponseEntity<?> loginUser(@RequestBody CreateUserRequestDTO createUserDTO) {
         createUserDTO.validate();
         try {
-            userService.addUser(createUserDTO.getUsername(), createUserDTO.getPassword(), createUserDTO.getUserType());
+            Integer userId = userService.login(createUserDTO.getUsername(), createUserDTO.getPassword());
+            IdResponseDTO response = new IdResponseDTO();
+            response.setId(userId);
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
-        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping(value = "/sign-up", consumes = "application/json")
+    public ResponseEntity<?> addUser(@RequestBody CreateUserRequestDTO createUserDTO) {
+        createUserDTO.validate();
+        try {
+            Integer userId = userService.addUser(createUserDTO.getUsername(), createUserDTO.getPassword(), createUserDTO.getUserType());
+            IdResponseDTO response = new IdResponseDTO();
+            response.setId(userId);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
 
