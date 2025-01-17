@@ -12,5 +12,15 @@ public interface UserService {
 
     List<User> getAllPlayers();
 
+    List<User> getAllDesigners();
+
     void followDesigner(Integer playerId, Integer designerId);
+
+    void unfollowDesigner(Integer playerId, Integer designerId);
+
+    void followPlayer(Integer playerId, String playerToFollowUsername);
+
+    void unfollowPlayer(Integer playerId, String playerToUnfollowUsername);
+
+
 }

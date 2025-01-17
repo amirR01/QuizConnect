@@ -3,9 +3,9 @@ POST http://localhost:4000/user/sign-up
 Content-Type: application/json
 
 {
-  "username": "Amirhossein",
-  "password": "defaultPassword",
-  "userType": "DESIGNER"
+  "username": "Erfan",
+  "password": "password",
+  "userType": "PLAYER"
 }
 
 
@@ -72,4 +72,19 @@ userId: 2
 Content-Type: application/json
 
 {
+}
+###
+GET http://localhost:4000/user/designer/all
+
+###
+GET http://localhost:4000/user/player/all
+
+###
+POST http://localhost:4000/user/player/follow-unfollow-player
+userId: 2
+Content-Type: application/json
+
+{
+  "username": "Sogand",
+  "follow": true
 }

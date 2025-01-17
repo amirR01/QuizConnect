@@ -5,18 +5,14 @@ import com.games.QuizConnect.model.entity.Question;
 import com.games.QuizConnect.model.enums.QuestionDifficulty;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class CreateQuestionRequestRequestDTO extends BaseRequestDTO {
 
     private String question;
 
-    private String option1;
-
-    private String option2;
-
-    private String option3;
-
-    private String option4;
+    private List<String> options;
 
     private Integer correctOption;
 
@@ -25,22 +21,17 @@ public class CreateQuestionRequestRequestDTO extends BaseRequestDTO {
     private QuestionDifficulty difficulty;
 
 
-    @Override
     public void validate() {
         if (question == null || question.isBlank()) {
             throw new IllegalArgumentException("Question cannot be empty");
         }
-        if (option1 == null || option1.isBlank()) {
-            throw new IllegalArgumentException("Option 1 cannot be empty");
+        if (options == null || options.size() != 4) {
+            throw new IllegalArgumentException("Options cannot be empty and must be 4");
         }
-        if (option2 == null || option2.isBlank()) {
-            throw new IllegalArgumentException("Option 2 cannot be empty");
-        }
-        if (option3 == null || option3.isBlank()) {
-            throw new IllegalArgumentException("Option 3 cannot be empty");
-        }
-        if (option4 == null || option4.isBlank()) {
-            throw new IllegalArgumentException("Option 4 cannot be empty");
+        for (String option : options) {
+            if (option.isBlank()) {
+                throw new IllegalArgumentException("Option cannot be empty");
+            }
         }
         if (correctOption == null) {
             throw new IllegalArgumentException("Correct option cannot be empty");
@@ -51,6 +42,6 @@ public class CreateQuestionRequestRequestDTO extends BaseRequestDTO {
     }
 
     public Question.QuestionOptions getQuestionOptions() {
-        return new Question.QuestionOptions(option1, option2, option3, option4);
+        return new Question.QuestionOptions(options.get(0), options.get(1), options.get(2), options.get(3));
     }
 }

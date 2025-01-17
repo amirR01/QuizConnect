@@ -10,7 +10,6 @@ public class CreateCategoryRequestRequestDTO extends BaseRequestDTO {
 
     private String description;
 
-    @Override
     public void validate() {
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("Name cannot be empty");

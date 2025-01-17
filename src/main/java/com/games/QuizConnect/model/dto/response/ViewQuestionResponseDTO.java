@@ -4,14 +4,14 @@ import com.games.QuizConnect.model.entity.Question;
 import com.games.QuizConnect.model.enums.QuestionDifficulty;
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 public class ViewQuestionResponseDTO {
     private Integer id;
     private String question;
-    private String option1;
-    private String option2;
-    private String option3;
-    private String option4;
+    private List<String> options = new ArrayList<>();
     private Integer correctOption;
     private QuestionDifficulty difficulty;
     private Integer categoryId;
@@ -33,10 +33,9 @@ public class ViewQuestionResponseDTO {
         ViewQuestionResponseDTO dto = new ViewQuestionResponseDTO();
         dto.setId(question.getId());
         dto.setQuestion(question.getQuestion());
-        dto.setOption1(question.getOptions().getByIndex(1));
-        dto.setOption2(question.getOptions().getByIndex(2));
-        dto.setOption3(question.getOptions().getByIndex(3));
-        dto.setOption4(question.getOptions().getByIndex(4));
+        for (int i = 1; i <= 4; i++) {
+            dto.getOptions().add(question.getOptions().getByIndex(i));
+        }
         dto.setDifficulty(question.getDifficulty());
         dto.setCategoryId(question.getCategory().getId());
         dto.setCategoryName(question.getCategory().getName());

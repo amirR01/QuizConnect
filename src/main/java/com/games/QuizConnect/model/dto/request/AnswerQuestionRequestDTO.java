@@ -10,7 +10,6 @@ public class AnswerQuestionRequestDTO extends BaseRequestDTO {
 
     private Integer answer;
 
-    @Override
     public void validate() {
         if (questionId == null) {
             throw new IllegalArgumentException("Question ID cannot be empty");
