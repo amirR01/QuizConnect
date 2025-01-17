@@ -13,7 +13,7 @@ public interface QuestionService {
 
     void changeCategory(Integer questionId, Integer categoryId);
 
-    void answerQuestion(Integer userId, Integer questionId, Integer answer);
+    boolean answerQuestion(Integer userId, Integer questionId, Integer answer);
 
     Question getQuestionById(Integer questionId);
 

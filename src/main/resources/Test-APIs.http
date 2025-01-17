@@ -1,5 +1,5 @@
 ###
-POST http://localhost:8080/user/sign-up
+POST http://localhost:4000/user/sign-up
 Content-Type: application/json
 
 {
@@ -10,7 +10,7 @@ Content-Type: application/json
 
 
 ###
-POST http://localhost:8080/category/add
+POST http://localhost:4000/category/add
 Content-Type: application/json
 
 {
@@ -19,7 +19,7 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:8080/question/add
+POST http://localhost:4000/question/designer/add
 userId: 1
 Content-Type: application/json
 
@@ -35,7 +35,7 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:8080/question/my-questions
+POST http://localhost:4000/question/designer/all
 userId: 1
 Content-Type: application/json
 
@@ -43,7 +43,11 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:8080/user/sign-up
+GET http://localhost:4000/category/all
+
+
+###
+POST http://localhost:4000/user/sign-up
 Content-Type: application/json
 
 {
@@ -60,4 +64,12 @@ Content-Type: application/json
 {
 "username": "Mahdi",
 "password": "password"
+}
+
+###
+POST http://localhost:4000/question/player/all
+userId: 2
+Content-Type: application/json
+
+{
 }

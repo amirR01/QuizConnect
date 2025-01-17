@@ -5,7 +5,7 @@ import com.games.QuizConnect.model.enums.QuestionDifficulty;
 import lombok.Data;
 
 @Data
-public class ViewQuestionResponseDto {
+public class ViewQuestionResponseDTO {
     private Integer id;
     private String question;
     private String option1;
@@ -18,15 +18,25 @@ public class ViewQuestionResponseDto {
     private String categoryName;
     private Integer designerId;
 
-    public static ViewQuestionResponseDto fromQuestion(Question question) {
-        ViewQuestionResponseDto dto = new ViewQuestionResponseDto();
+    public static ViewQuestionResponseDTO fromQuestionForDesigner(Question question) {
+        ViewQuestionResponseDTO dto = fromQuestion(question);
+        dto.setCorrectOption(question.getCorrectOption());
+
+        return dto;
+    }
+
+    public static ViewQuestionResponseDTO fromQuestionForPlayer(Question question) {
+        return fromQuestion(question);
+    }
+
+    private static ViewQuestionResponseDTO fromQuestion(Question question) {
+        ViewQuestionResponseDTO dto = new ViewQuestionResponseDTO();
         dto.setId(question.getId());
         dto.setQuestion(question.getQuestion());
         dto.setOption1(question.getOptions().getByIndex(1));
         dto.setOption2(question.getOptions().getByIndex(2));
         dto.setOption3(question.getOptions().getByIndex(3));
         dto.setOption4(question.getOptions().getByIndex(4));
-        dto.setCorrectOption(question.getCorrectOption());
         dto.setDifficulty(question.getDifficulty());
         dto.setCategoryId(question.getCategory().getId());
         dto.setCategoryName(question.getCategory().getName());

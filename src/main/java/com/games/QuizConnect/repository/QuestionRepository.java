@@ -24,7 +24,7 @@ public interface QuestionRepository extends JpaRepository<Question, Integer> {
 
     @Query(value =
             """
-                    SELECT * FROM question q
+                    SELECT q.* FROM question q
                     LEFT JOIN 
                     (SELECT * from user_question_attempt inner_uqa 
                     where inner_uqa.user_id = :playerId ) uqa 
@@ -40,6 +40,6 @@ public interface QuestionRepository extends JpaRepository<Question, Integer> {
             Integer playerId,
             Integer designerId,
             Integer categoryId,
-            QuestionDifficulty difficulty
+            String difficulty
     );
 }

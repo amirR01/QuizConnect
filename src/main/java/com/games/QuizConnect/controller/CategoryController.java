@@ -3,13 +3,13 @@ package com.games.QuizConnect.controller;
 import com.games.QuizConnect.model.BaseResponseDTO;
 import com.games.QuizConnect.model.dto.request.CreateCategoryRequestRequestDTO;
 import com.games.QuizConnect.model.dto.response.IdResponseDTO;
+import com.games.QuizConnect.model.dto.response.ViewCategoryResponseDTO;
 import com.games.QuizConnect.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/category")
@@ -40,4 +40,18 @@ public class CategoryController {
             return ResponseEntity.badRequest().body(BaseResponseDTO.error(e.getMessage()));
         }
     }
+
+    // TODO: add pagination
+    @GetMapping(value = "/all")
+    public ResponseEntity<BaseResponseDTO<?>> getAllCategories() {
+        try {
+            List<ViewCategoryResponseDTO> response = categoryService.getAllCategories().stream()
+                    .map(ViewCategoryResponseDTO::fromEntity)
+                    .toList();
+            return ResponseEntity.ok(BaseResponseDTO.ok(response));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(BaseResponseDTO.error(e.getMessage()));
+        }
+    }
+
 }

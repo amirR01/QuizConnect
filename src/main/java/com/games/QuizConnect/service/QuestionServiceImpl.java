@@ -74,21 +74,26 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Transactional
-    public void answerQuestion(Integer userId, Integer questionId, Integer answer) {
+    public boolean answerQuestion(Integer userId, Integer questionId, Integer answer) {
         User player = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
         Question question = questionRepository.findById(questionId).orElseThrow(() -> new IllegalArgumentException("Question not found"));
         if (player.getUserType() != UserType.PLAYER) {
             throw new IllegalArgumentException("User is not a player");
         }
 
+        boolean correct = question.getCorrectOption().equals(answer);
+
         UserQuestionAttempt userQuestionAttempt = new UserQuestionAttempt();
         userQuestionAttempt.setUser(player);
         userQuestionAttempt.setQuestion(question);
         userQuestionAttempt.setChosenOption(answer);
-        player.addScore(question.getDifficulty().getScore());
 
+        if (correct) {
+            player.addScore(question.getDifficulty().getScore());
+        }
         userQuestionAttemptRepository.saveAndFlush(userQuestionAttempt);
         userRepository.saveAndFlush(player);
+        return correct;
     }
 
     @Override
@@ -111,7 +116,8 @@ public class QuestionServiceImpl implements QuestionService {
             if (playerId == null) {
                 throw new IllegalArgumentException("Player id cannot be empty");
             }
-            return questionRepository.findNotAttemptedQuestions(playerId, designerId, categoryId, difficulty);
+            String difficultyString = difficulty == null ? null : difficulty.toString();
+            return questionRepository.findNotAttemptedQuestions(playerId, designerId, categoryId, difficultyString);
         } else {
             return questionRepository.findAllQuestions(designerId, categoryId, difficulty);
         }

@@ -4,7 +4,7 @@ import com.games.QuizConnect.model.BaseResponseDTO;
 import com.games.QuizConnect.model.dto.request.CreateQuestionRequestRequestDTO;
 import com.games.QuizConnect.model.dto.request.GetQuestionsRequestDTO;
 import com.games.QuizConnect.model.dto.response.IdResponseDTO;
-import com.games.QuizConnect.model.dto.response.ViewQuestionResponseDto;
+import com.games.QuizConnect.model.dto.response.ViewQuestionResponseDTO;
 import com.games.QuizConnect.model.entity.Question;
 import com.games.QuizConnect.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,14 +16,13 @@ import java.util.List;
 import static com.games.QuizConnect.model.entity.User.userIdHeader;
 
 @RestController
-@RequestMapping("/question")
-public class QuestionController {
-    // TODO: use Spring Security to authenticate users and store current user in the session
+@RequestMapping("/question/designer")
+public class QuestionDesignerController {
 
     private final QuestionService questionService;
 
     @Autowired
-    public QuestionController(QuestionService questionService) {
+    public QuestionDesignerController(QuestionService questionService) {
         this.questionService = questionService;
     }
 
@@ -54,7 +53,8 @@ public class QuestionController {
     }
 
     // TODO: add pagination
-    @PostMapping(value = "/my-questions", consumes = "application/json")
+    // TODO: use Spring Security to authenticate users and store current user in the session
+    @PostMapping(value = "/all", consumes = "application/json")
     public ResponseEntity<BaseResponseDTO<?>> getMyQuestions(
             @RequestHeader(userIdHeader) Integer userId,
             @RequestBody GetQuestionsRequestDTO getQuestionsRequestDTO
@@ -70,7 +70,7 @@ public class QuestionController {
                     false,
                     null
             );
-            List<ViewQuestionResponseDto> response = questions.stream().map(ViewQuestionResponseDto::fromQuestion).toList();
+            List<ViewQuestionResponseDTO> response = questions.stream().map(ViewQuestionResponseDTO::fromQuestionForDesigner).toList();
             return ResponseEntity.ok(BaseResponseDTO.ok(response));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(BaseResponseDTO.error(e.getMessage()));

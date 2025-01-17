@@ -30,6 +30,7 @@ public class Question extends BaseEntity {
     @ManyToOne(targetEntity = Category.class)
     private Category category;
 
+    @Enumerated(EnumType.STRING)
     private QuestionDifficulty difficulty;
 
     private String explanation;
