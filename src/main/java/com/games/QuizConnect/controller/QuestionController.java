@@ -1,5 +1,6 @@
 package com.games.QuizConnect.controller;
 
+import com.games.QuizConnect.model.BaseResponseDTO;
 import com.games.QuizConnect.model.dto.request.CreateQuestionRequestRequestDTO;
 import com.games.QuizConnect.model.dto.request.GetQuestionsRequestDTO;
 import com.games.QuizConnect.model.dto.response.IdResponseDTO;
@@ -27,13 +28,13 @@ public class QuestionController {
     }
 
     @PostMapping(value = "/add", consumes = "application/json")
-    public ResponseEntity<?> addQuestion(
+    public ResponseEntity<BaseResponseDTO<?>> addQuestion(
             @RequestHeader(userIdHeader) Integer userId,
             @RequestBody CreateQuestionRequestRequestDTO createQuestionRequestDTO
     ) {
         createQuestionRequestDTO.validate();
         if (userId == null) {
-            return ResponseEntity.badRequest().body("User ID is required");
+            return ResponseEntity.badRequest().body(BaseResponseDTO.error("User ID is required"));
         }
         try {
             Integer questionId = questionService.addQuestion(
@@ -46,20 +47,20 @@ public class QuestionController {
             );
             IdResponseDTO response = new IdResponseDTO();
             response.setId(questionId);
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(BaseResponseDTO.ok(response));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(BaseResponseDTO.error(e.getMessage()));
         }
     }
 
     // TODO: add pagination
     @PostMapping(value = "/my-questions", consumes = "application/json")
-    public ResponseEntity<?> getMyQuestions(
+    public ResponseEntity<BaseResponseDTO<?>> getMyQuestions(
             @RequestHeader(userIdHeader) Integer userId,
             @RequestBody GetQuestionsRequestDTO getQuestionsRequestDTO
     ) {
         if (userId == null) {
-            return ResponseEntity.badRequest().body("User ID is required");
+            return ResponseEntity.badRequest().body(BaseResponseDTO.error("User ID is required"));
         }
         try {
             List<Question> questions = questionService.getAllQuestions(
@@ -69,9 +70,10 @@ public class QuestionController {
                     false,
                     null
             );
-            return ResponseEntity.ok(questions.stream().map(ViewQuestionResponseDto::fromQuestion).toList());
+            List<ViewQuestionResponseDto> response = questions.stream().map(ViewQuestionResponseDto::fromQuestion).toList();
+            return ResponseEntity.ok(BaseResponseDTO.ok(response));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(BaseResponseDTO.error(e.getMessage()));
         }
     }
 

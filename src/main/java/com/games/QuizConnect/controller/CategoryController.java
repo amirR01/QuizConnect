@@ -1,5 +1,6 @@
 package com.games.QuizConnect.controller;
 
+import com.games.QuizConnect.model.BaseResponseDTO;
 import com.games.QuizConnect.model.dto.request.CreateCategoryRequestRequestDTO;
 import com.games.QuizConnect.model.dto.response.IdResponseDTO;
 import com.games.QuizConnect.service.CategoryService;
@@ -22,7 +23,7 @@ public class CategoryController {
     }
 
     @PostMapping(value = "/add", consumes = "application/json")
-    public ResponseEntity<?> addCategory(
+    public ResponseEntity<BaseResponseDTO<?>> addCategory(
             @RequestBody CreateCategoryRequestRequestDTO createCategoryRequestDTO
     ) {
         createCategoryRequestDTO.validate();
@@ -31,11 +32,12 @@ public class CategoryController {
                     createCategoryRequestDTO.getName(),
                     createCategoryRequestDTO.getDescription()
             );
-            IdResponseDTO response = new IdResponseDTO();
-            response.setId(categoryId);
-            return ResponseEntity.ok(response);
+            IdResponseDTO idResponseDTO = new IdResponseDTO();
+            idResponseDTO.setId(categoryId);
+            return ResponseEntity.ok(BaseResponseDTO.ok(idResponseDTO));
+
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(BaseResponseDTO.error(e.getMessage()));
         }
     }
 }

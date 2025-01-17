@@ -1,12 +1,11 @@
 package com.games.QuizConnect.model.dto.response;
 
-import com.games.QuizConnect.model.BaseResponseDTO;
 import com.games.QuizConnect.model.entity.User;
 import com.games.QuizConnect.model.enums.UserType;
 import lombok.Data;
 
 @Data
-public class LoginResponseDTO extends BaseResponseDTO {
+public class LoginResponseDTO {
     private Integer id;
     private UserType userType;
 

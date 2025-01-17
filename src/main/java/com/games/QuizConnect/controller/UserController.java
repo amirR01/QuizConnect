@@ -1,5 +1,6 @@
 package com.games.QuizConnect.controller;
 
+import com.games.QuizConnect.model.BaseResponseDTO;
 import com.games.QuizConnect.model.dto.request.CreateUserRequestRequestDTO;
 import com.games.QuizConnect.model.dto.request.LoginRequestRequestDTO;
 import com.games.QuizConnect.model.dto.response.IdResponseDTO;
@@ -24,15 +25,13 @@ public class UserController {
     }
 
     @PostMapping(value = "/login", consumes = "application/json")
-    public ResponseEntity<?> loginUser(@RequestBody LoginRequestRequestDTO createUserDTO) {
+    public ResponseEntity<BaseResponseDTO<?>> loginUser(@RequestBody LoginRequestRequestDTO createUserDTO) {
         createUserDTO.validate();
         try {
             User user = userService.login(createUserDTO.getUsername(), createUserDTO.getPassword());
-            return ResponseEntity.ok(LoginResponseDTO.fromUser(user));
+            return ResponseEntity.ok(BaseResponseDTO.ok(LoginResponseDTO.fromUser(user)));
         } catch (Exception e) {
-            LoginResponseDTO response = new LoginResponseDTO();
-            response.setStatus(false);
-            return ResponseEntity.ok(response);
+            return ResponseEntity.badRequest().body(BaseResponseDTO.error(e.getMessage()));
         }
     }
 
